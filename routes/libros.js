@@ -17,6 +17,7 @@ function BooksApi(app){
         console.log(tags)
         try {
           const Libros = await BookService.getMovies(/*{ tags }*/);
+          console.log(Libros);
           // throw new Error("Error getting movies");
           res.status(200).json({
             data: Libros,
