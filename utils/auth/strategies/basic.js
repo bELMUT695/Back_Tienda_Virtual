@@ -8,11 +8,11 @@ const UsersService = require('../../../services/user');
 passport.use(
     new BasicStrategy(async (email, password, cb) => {
       const userService = new UsersService();
-  
+      console.log(email)
       // vamos a verificar si el usurio existe o no
       try {
         const user = await userService.getUser({ email });
-  
+        console.log(user)
         if (!user) {
           return cb(boom.unauthorized(), false);
         }

@@ -11,7 +11,7 @@ class UsersService{
 
     // recibe un email y apartir de aquí buscamos a ese usuario en la DB
   async getUser({ email }) {
-    const [user] = await this.mongoDB.getAll(this.collection, { email });
+    const [user] = await this.mongoDB.getEmail(this.collection, { email });
     return user;
   }
   // creamos el usuario

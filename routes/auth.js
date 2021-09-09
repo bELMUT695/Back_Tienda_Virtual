@@ -21,7 +21,7 @@ function authApi (app){
      * vamos a firmar en el JWT que vamos a devolver
      */
     const { apiKeyToken } = req.body;
-    console.log(req.body)
+   console.log(req.body)
     // verificamos si no existe el token
     if (!apiKeyToken) {
       next(boom.unauthorized('apiKeyToken is required'), false);
