@@ -10,6 +10,7 @@ const joi = require('@hapi/joi');
 require('../utils/auth/strategies/basic');
 function authApi (app){
 
+  
   const router = express.Router();
   app.use('/api/auth', router);
   const apiKeysService = new ApiKeysService();
@@ -20,6 +21,13 @@ function authApi (app){
      * este es el token que le vamos a pasar el Sign In para determinar que clase de permiso
      * vamos a firmar en el JWT que vamos a devolver
      */
+
+     res.header('Access-Control-Allow-Origin', '*');
+     res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+ 
+
     const { apiKeyToken } = req.body;
    console.log(req.body)
     // verificamos si no existe el token
