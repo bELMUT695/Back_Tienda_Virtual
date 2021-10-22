@@ -1,7 +1,7 @@
 const chalk = require('chalk');
 const debug = require('debug')('app:scripts:api-keys');
 const crypto = require('crypto');
-const MongoLib = require('../../lib/Mongo_Libros');
+const MongoLib = require('../../lib/mongo_Clothe');
 
 const adminScopes = [
   'signin:auth',

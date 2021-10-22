@@ -1,4 +1,4 @@
-const MongoLib = require('../lib/Mongo_Libros');
+const MongoLib = require('../lib/mongo_Clothe');
 // se encarga de crear password en modo Hash
 const bcrypt = require('bcryptjs');
 
