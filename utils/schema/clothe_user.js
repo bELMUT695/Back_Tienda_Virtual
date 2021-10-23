@@ -17,4 +17,4 @@ const prenda_user = new Schema({
     timestamps: true
 })
 
-module.exports = model('Rol',rolSchema)
+module.exports = model('Rol',prenda_user)
