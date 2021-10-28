@@ -12,6 +12,7 @@ function ClotheApi(app){
     app.use('/api/clothe',router);
     const clothesServices = new ClothesServices();
     router.get('/', async function (req, res, next) {
+      
         cacheResponse(res, FIVE_MINUTES_IN_SECONDS);
         const { tags } = req.query;
        
