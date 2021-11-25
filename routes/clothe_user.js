@@ -1,5 +1,8 @@
 const express = require('express');
+const math = require('mathjs');
 const ClotheUsersServices = require('../services/clothe_user');
+var recommendations =require('../lib/jaccard')
+var CoRatedItemsUser=require('../lib/coRatedItemsUser')
 const cacheResponse = require('../utils/cacheResponse');
 var linearAlgebra = require('linear-algebra')(),     // initialise it
     Vector = linearAlgebra.Vector,
@@ -26,19 +29,47 @@ function ClotheUserApi(app){
       const ClotheUsers = await clotheUsersServices.getClotheUser();
      
             var dataframe = jd.dfFromObjArray(ClotheUsers);
-            //dataframe.p();
-            var Newdataframe= dataframe.s(jd.rng(0, 999), ['ID_Producto', 'Rating','ID_Usuario']);
-            Newdataframe.p();
+            var dataframeSort =dataframe .sort('ID_Usuario');
+           
+            //df5.p();
+            var Newdataframe= dataframeSort.s(jd.rng(0, 999), ['ID_Producto', 'Rating','ID_Usuario']);
+            //Newdataframe.p();
             var pivotedMatrix = Newdataframe.pivot('ID_Producto', 'Rating');
-            pivotedMatrix.p();
-            //var interaction_matrix = pivotedMatrix.s(null, jd.rng(1, pivotedMatrix.nCol())).toMatrix();
-           // var clusterRatingMatrix = new Matrix(interaction_matrix);
-           // console.log(clusterRatingMatrix)
-            console.log("BBB")
+            var pivotedMatrixItems = Newdataframe.pivot('ID_Usuario', 'Rating');
+            //pivotedMatrix.p();
+           // console.log(pivotedMatrix.p()[1])
+            var interaction_matrix = pivotedMatrix.s(null, jd.rng(1, pivotedMatrix.nCol())).toMatrix();
+            
+
+
+             var clusterRatingMatrix = new Matrix(interaction_matrix);
+
+
+            var IndiceUser=pivotedMatrixItems._names.values.indexOf('1402876800');
+
+            var ItemsValues=pivotedMatrix._names.values;
+            console.log(ItemsValues);
+             var normalizedMatrix = clusterRatingMatrix.map(function (v) {
+              // console.log((isNaN(v)))
+              return (isNaN(v)) ? 0 :v;
+              });
+          const RatedUser=normalizedMatrix.data[IndiceUser-1];
+          //const  CoItemsRatedUser=CoRatedItemsUser
+          ratingsMatrix = math.matrix(normalizedMatrix.data);
+          const ratedItemsForUser = CoRatedItemsUser.CoRatedItemsUser(RatedUser,ratingsMatrix.size()[1]);
+         
+          const IndexItemsRecomendation = recommendations.CFilterJaccard(normalizedMatrix.data, ratedItemsForUser); 
+          
+          console.log(IndexItemsRecomendation.length)
+          const  Items_ID_Recomendation= [];
+          for (let index = 0; index < IndexItemsRecomendation.length; index += 1){
+            Items_ID_Recomendation.push(ItemsValues[IndexItemsRecomendation[index]+1])
+          }
+          console.log(Items_ID_Recomendation)
      
       res.status(200).json({
-        data: ClotheUsers,
-        message: 'clothe_users listed',
+        data: Items_ID_Recomendation,
+        message: 'Item recomendation listed',
       });
     } catch(err){
       next(err);
