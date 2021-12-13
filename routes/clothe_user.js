@@ -29,31 +29,35 @@ function ClotheUserApi(app){
       const ClotheUsers = await clotheUsersServices.getClotheUser();
      
             var dataframe = jd.dfFromObjArray(ClotheUsers);
-            var dataframeSort =dataframe .sort('ID_Usuario');
+            var dataframeSort =dataframe .sort('ID_USER');
+            dataframeSort.p();
            
-            //df5.p();
-            var Newdataframe= dataframeSort.s(jd.rng(0, 999), ['ID_Producto', 'Rating','ID_Usuario']);
-            //Newdataframe.p();
-            var pivotedMatrix = Newdataframe.pivot('ID_Producto', 'Rating');
-            var pivotedMatrixItems = Newdataframe.pivot('ID_Usuario', 'Rating');
-            //pivotedMatrix.p();
+           
+            var Newdataframe= dataframeSort.s(jd.rng(0, 1000), ['ID_CLOTHE', 'RATING','ID_USER']);
+            Newdataframe.p();
+            var pivotedMatrix = Newdataframe.pivot('ID_CLOTHE', 'RATING');
+            var pivotedMatrixItems = Newdataframe.pivot('ID_USER', 'RATING');
+           pivotedMatrix.p();
+           console.log(pivotedMatrix.nCol(),"fssdsds")
            // console.log(pivotedMatrix.p()[1])
             var interaction_matrix = pivotedMatrix.s(null, jd.rng(1, pivotedMatrix.nCol())).toMatrix();
             
 
 
-             var clusterRatingMatrix = new Matrix(interaction_matrix);
+           var clusterRatingMatrix = new Matrix(interaction_matrix);
 
 
-            var IndiceUser=pivotedMatrixItems._names.values.indexOf('1402876800');
+            var IndiceUser=pivotedMatrixItems._names.values.indexOf('1423279382');
+            console.log(IndiceUser,"sssssssss")
 
             var ItemsValues=pivotedMatrix._names.values;
             console.log(ItemsValues);
              var normalizedMatrix = clusterRatingMatrix.map(function (v) {
-              // console.log((isNaN(v)))
+               //console.log((isNaN(v)))
               return (isNaN(v)) ? 0 :v;
               });
-          const RatedUser=normalizedMatrix.data[IndiceUser-1];
+             // console.log(normalizedMatrix);
+        const RatedUser=normalizedMatrix.data[IndiceUser-1];
           //const  CoItemsRatedUser=CoRatedItemsUser
           ratingsMatrix = math.matrix(normalizedMatrix.data);
           const ratedItemsForUser = CoRatedItemsUser.CoRatedItemsUser(RatedUser,ratingsMatrix.size()[1]);
