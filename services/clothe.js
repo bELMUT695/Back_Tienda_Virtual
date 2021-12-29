@@ -10,6 +10,18 @@ class ClothesService{
         const clothes = await this.mongoDB.getAll(this.collection /*, query*/)
         return clothes || [];
     }
+
+    async getClothe(clotheid){
+        
+         const clothe=await this.mongoDB.getClohtebyId(this.collection ,clotheid);
+         return clothe ||{};
+    }
+
+    async getClohtebyId(categoryId){
+        const clothes =await this.mongoDB.getClohtebyCategory(this.collection,categoryId);
+        return clothes || {};
+    }
+    
    
 }
 module.exports = ClothesService;

@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 
 class UsersService{
     constructor(){
-        this.collection='Users';
+        this.collection='User';
         this.mongoDB=new MongoLib();
 
     }

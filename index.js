@@ -7,8 +7,8 @@ const ClotheApi = require('./routes/clothe.js');
 const ClotheUserApi = require('./routes/clothe_user.js');
 const PersonalInformationApi = require('./routes/personal_information.js');
 
-//app.use(cors({ origin: "http://localhost:3000" }));
-app.use(cors({ origin: "https://front-recomendacion-contenidos.herokuapp.com" }));
+app.use(cors({ origin: "http://localhost:3000" }));
+//app.use(cors({ origin: "https://front-recomendacion-contenidos.herokuapp.com" }));
 
 app.use(express.json());
 ClotheApi(app);
