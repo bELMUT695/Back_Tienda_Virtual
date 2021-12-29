@@ -9,7 +9,6 @@ var linearAlgebra = require('linear-algebra')(),     // initialise it
     Matrix = linearAlgebra.Matrix;
 var jd = require('jsdataframe');
 
-
 const {
   FIVE_MINUTES_IN_SECONDS,
   SIXTY_MINUTES_IN_SECONDS
