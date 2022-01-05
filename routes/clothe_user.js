@@ -33,7 +33,7 @@ function ClotheUserApi(app){
             dataframeSort.p();
            
            
-            var Newdataframe= dataframeSort.s(jd.rng(0, 1000), ['ID_CLOTHE', 'RATING','ID_USER']);
+            var Newdataframe= dataframeSort.s(jd.rng(0, 3300), ['ID_CLOTHE', 'RATING','ID_USER']);
             Newdataframe.p();
             var pivotedMatrix = Newdataframe.pivot('ID_CLOTHE', 'RATING');
             var pivotedMatrixItems = Newdataframe.pivot('ID_USER', 'RATING');
@@ -47,7 +47,7 @@ function ClotheUserApi(app){
            var clusterRatingMatrix = new Matrix(interaction_matrix);
 
 
-            var IndiceUser=pivotedMatrixItems._names.values.indexOf('1423279382');
+            var IndiceUser=pivotedMatrixItems._names.values.indexOf('1194982400');
             console.log(IndiceUser,"sssssssss")
 
             var ItemsValues=pivotedMatrix._names.values;

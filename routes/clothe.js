@@ -1,4 +1,5 @@
 const express = require('express');
+const { typeOf} = require('mathjs');
 const ClothesServices = require('../services/clothe');
 const cacheResponse = require('../utils/cacheResponse');
 const {
@@ -29,7 +30,55 @@ function ClotheApi(app){
         }
         
       });
-    
+      
+      
+      router.get("/:clotheId",async function(req,res,next){
+        cacheResponse(res.FIVE_MINUTES_IN_SECONDS);
+        console.log(req.params)
+        const {clotheId}=req.params;
+        try {
+         
+          const Clothe=await clothesServices.getClothe(clotheId)
+
+          res.status(200).json({
+            data:Clothe,
+            message:'Clothe encontrado'
+          });
+        } catch (error) {
+          next(error)
+        }
+      });
+
+
+      router.get("/category/:categoryId",async function(req,res,next){
+        cacheResponse(res.FIVE_MINUTES_IN_SECONDS);
+        console.log(req.params)
+        const {categoryId}=req.params;
+        try {
+          const clothes=await clothesServices.getClohtebyId(categoryId)
+          res.status(200).json({
+            data:clothes,
+            message:'categorias encontrada'
+          });
+        } catch (error) {
+          next(error)
+        }
+      });
+
+      router.get("/category1/:gender",async function(req,res,next){
+        cacheResponse(res.FIVE_MINUTES_IN_SECONDS);
+        const {gender}=req.params;   
+        try {
+          const clothes=await clothesServices.getClohtebyGender(gender);
+          res.status(200).json({
+            data:clothes,
+            message:'categorias encontrada'
+          });
+        } catch (error) {
+          next(error)
+        }
+      })
+   
 }
 
 module.exports =  ClotheApi;

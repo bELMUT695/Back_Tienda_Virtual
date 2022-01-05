@@ -2,7 +2,7 @@ const MongoLib = require('../lib/mongo_Clothe');
 
 class PersonalInformationService{
     constructor(){
-        this.collection='Personal_Information';
+        this.collection='User';
         this.mongoDB= new MongoLib();
     }
 
