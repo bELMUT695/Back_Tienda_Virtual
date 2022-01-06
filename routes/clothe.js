@@ -32,7 +32,8 @@ function ClotheApi(app){
       });
       
       
-      router.get("/:clotheId",async function(req,res,next){
+      router.get("/filter/:clotheId",async function(req,res,next){
+        console.log("DDDDDDDDDDDDDDDDD")
         cacheResponse(res.FIVE_MINUTES_IN_SECONDS);
         console.log(req.params)
         const {clotheId}=req.params;
@@ -66,9 +67,9 @@ function ClotheApi(app){
         }
       });
 
-      router.get("/categor/gender",async function(req,res,next){
+      router.get("/gender",async function(req,res,next){
         cacheResponse(res.FIVE_MINUTES_IN_SECONDS);
-   
+         console.log("DDDDDDDDDDDDDDDDD")
         try {
           const clothes=await clothesServices.getClohtebyGender();
           res.status(200).json({
