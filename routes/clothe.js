@@ -79,19 +79,7 @@ function ClotheApi(app){
         }
       })
 
-      router.get("/image/:image_id",async function(req,res,next){
-        cacheResponse(res.FIVE_MINUTES_IN_SECONDS);
-        const {image_id}=req.params;   
-        try {
-          const clothes=await clothesServices.getClohtebyGender(image_id);
-          res.status(200).json({
-            data:clothes,
-            message:'categorias encontrada'
-          });
-        } catch (error) {
-          next(error)
-        }
-      })
+   
    
 }
 
