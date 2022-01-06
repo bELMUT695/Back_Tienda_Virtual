@@ -52,6 +52,7 @@ function ClotheApi(app){
 
       router.get("/category/:categoryId",async function(req,res,next){
         cacheResponse(res.FIVE_MINUTES_IN_SECONDS);
+        console.log("ADsssssssSSSSSSSSS")
         console.log(req.params)
         const {categoryId}=req.params;
         try {
@@ -65,11 +66,11 @@ function ClotheApi(app){
         }
       });
 
-      router.get("/category1/:female",async function(req,res,next){
+      router.get("/categor/gender",async function(req,res,next){
         cacheResponse(res.FIVE_MINUTES_IN_SECONDS);
-        const {female}=req.params;   
+   
         try {
-          const clothes=await clothesServices.getClohtebyGender(female);
+          const clothes=await clothesServices.getClohtebyGender();
           res.status(200).json({
             data:clothes,
             message:'categorias encontrada'

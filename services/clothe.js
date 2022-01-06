@@ -22,9 +22,9 @@ class ClothesService{
         return clothes || {};
     }
 
-    async getClohtebyGender(gender){
-        console.log(gender+"DDDDD")
-        const clothes =await this.mongoDB.getClohtebyCategoryGender(this.collection,gender);
+    async getClohtebyGender(){
+        
+        const clothes =await this.mongoDB.getClohtebyCategoryGender(this.collection);
         return clothes || {};
     }
     
