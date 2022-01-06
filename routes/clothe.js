@@ -10,7 +10,7 @@ const {
   
 function ClotheApi(app){
     const router = express.Router();
-    app.use('/api/clothes',router);
+    app.use('/api/clothe',router);
     const clothesServices = new ClothesServices();
     router.get('/', async function (req, res, next) {
       
@@ -32,21 +32,24 @@ function ClotheApi(app){
       });
       
       
-     
-
-      router.get("/gender",async function(req,res,next){
+      router.get("/:clotheId",async function(req,res,next){
         cacheResponse(res.FIVE_MINUTES_IN_SECONDS);
-         console.log("DDDDDDDDDDDDDDDDD")
+        console.log(req.params)
+        const {clotheId}=req.params;
         try {
-          const clothes=await clothesServices.getClohtebyGender();
+         
+          const Clothe=await clothesServices.getClothe(clotheId)
+
           res.status(200).json({
-            data:clothes,
-            message:'categorias encontrada'
+            data:Clothe,
+            message:'Clothe encontrado'
           });
         } catch (error) {
           next(error)
         }
-      })
+      });
+
+
 
    
    
