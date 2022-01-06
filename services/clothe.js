@@ -24,7 +24,7 @@ class ClothesService{
 
     async getClohtebyGender(gender){
         console.log(gender+"DDDDD")
-        const clothes =await this.mongoDB.getClohtebyGender(this.collection,gender);
+        const clothes =await this.mongoDB.getClohtebyCategoryGender(this.collection,gender);
         return clothes || {};
     }
     

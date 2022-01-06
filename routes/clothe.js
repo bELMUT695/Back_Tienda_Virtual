@@ -65,11 +65,11 @@ function ClotheApi(app){
         }
       });
 
-      router.get("/category1/:gender",async function(req,res,next){
+      router.get("/category1/:female",async function(req,res,next){
         cacheResponse(res.FIVE_MINUTES_IN_SECONDS);
-        const {gender}=req.params;   
+        const {female}=req.params;   
         try {
-          const clothes=await clothesServices.getClohtebyGender(gender);
+          const clothes=await clothesServices.getClohtebyGender(female);
           res.status(200).json({
             data:clothes,
             message:'categorias encontrada'
