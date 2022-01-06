@@ -10,6 +10,9 @@ const PersonalInformationApi = require('./routes/personal_information.js');
 app.use(cors({ origin: "http://localhost:3000" }));
 app.use(cors({ origin: "https://front-recomendacion-contenidos.herokuapp.com" }));
 
+
+
+
 app.use(express.json());
 ClotheApi(app);
 ClotheUserApi(app);
