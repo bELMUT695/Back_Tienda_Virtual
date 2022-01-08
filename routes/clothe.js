@@ -65,7 +65,7 @@ function ClotheApi(app){
         }
       });
 
-      router.get("/category1/:female",async function(req,res,next){
+      router.get("/gender/:female",async function(req,res,next){
       
        
         const {female}=req.params;   
