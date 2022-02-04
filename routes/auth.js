@@ -20,6 +20,17 @@ function authApi(app) {
      * vamos a firmar en el JWT que vamos a devolver
      */
 
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method"
+    );
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET, POST, OPTIONS, PUT, DELETE"
+    );
+    res.header("Allow", "GET, POST, OPTIONS, PUT, DELETE");
+
     const { apiKeyToken } = req.body;
     console.log(req.body);
     // verificamos si no existe el token
