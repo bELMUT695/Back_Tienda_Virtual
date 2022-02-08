@@ -10,6 +10,14 @@ class ClotheUserService {
     const clothe_users = await this.mongoDB.getAll(this.collection);
     return clothe_users || [];
   }
+
+  async getClotheUserByrating(clotheid) {
+    const clothe = await this.mongoDB.getClohteRatingValue(
+      this.collection,
+      clotheid
+    );
+    return clothe || {};
+  }
 }
 
 module.exports = ClotheUserService;

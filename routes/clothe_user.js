@@ -81,7 +81,7 @@ function ClotheUserApi(app) {
           ItemsValues[IndexItemsRecomendation[index] + 1]
         );
       }
-      console.log(Items_ID_Recomendation);
+
       const ClotheRecomended = await clothesServices.getClotheRecomended(
         Items_ID_Recomendation
       );
@@ -91,6 +91,19 @@ function ClotheUserApi(app) {
       });
     } catch (err) {
       next(err);
+    }
+  });
+
+  router.get("/value-rating/:Id", async function (req, res, next) {
+    const { Id } = req.params;
+    try {
+      const clothes = await clotheUsersServices.getClotheUserByrating(Id);
+      res.status(200).json({
+        data: clothes,
+        message: "categorias encontradass",
+      });
+    } catch (error) {
+      next(error);
     }
   });
 }
