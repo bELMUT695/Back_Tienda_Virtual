@@ -6,7 +6,9 @@ const app = express();
 const ClotheApi = require("./routes/clothe.js");
 const ClotheUserApi = require("./routes/clothe_user.js");
 const PersonalInformationApi = require("./routes/personal_information.js");
+const kmeans = require("./routes/kmeans");
 
+//app.use(cors({ origin: "http://localhost:3000" }));
 app.use(
   cors({ origin: "https://front-recomendacion-contenidos.herokuapp.com" })
 );
@@ -26,6 +28,7 @@ ClotheApi(app);
 ClotheUserApi(app);
 PersonalInformationApi(app);
 authApi(app);
+kmeans(app);
 app.listen(config.port, () => {
   console.log(`Listening http://localhost:${config.port}`);
 });
