@@ -21,7 +21,8 @@ function ClotheUserApi(app) {
   const clotheUsersServices = new ClotheUsersServices();
   const clothesServices = new ClothesServices();
 
-  router.get("/", async function (req, res, next) {
+  router.get("/:clotheId", async function (req, res, next) {
+    const { clotheId } = req.params;
     console.log("Fffffff");
     //cacheResponse(res, FIVE_MINUTES_IN_SECONDS);
     const { tags } = req.query;
@@ -50,7 +51,7 @@ function ClotheUserApi(app) {
 
       var clusterRatingMatrix = new Matrix(interaction_matrix);
 
-      var IndiceUser = pivotedMatrixItems._names.values.indexOf("1495016590");
+      var IndiceUser = pivotedMatrixItems._names.values.indexOf(clotheId);
       console.log(IndiceUser, "sssssssss");
 
       var ItemsValues = pivotedMatrix._names.values;
