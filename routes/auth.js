@@ -67,12 +67,15 @@ function authApi(app) {
 
           // teniendo en cuenta el API Key procedemos a construir nuestro JWT
 
-          const { _id: id, name, email } = user;
+          const { _id: id, first_name, last_name, gender, email } = user;
+          console.log(user, "DFGERGER");
 
           const payload = {
             sub: id,
-            name,
+            first_name,
             email,
+            last_name,
+            gender,
             scopes: apiKey.scopes,
           };
 
@@ -80,7 +83,12 @@ function authApi(app) {
             //expiresIn: '15m'
           });
 
-          return res.status(200).json({ token, user: { id, name, email } });
+          return res
+            .status(200)
+            .json({
+              token,
+              user: { id, first_name, last_name, gender, email },
+            });
         });
       } catch (err) {
         next(err);
