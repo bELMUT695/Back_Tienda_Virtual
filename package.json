@@ -30,6 +30,7 @@
     "linear-algebra": "^3.1.4",
     "mathjs": "^9.5.1",
     "mongoose": "^5.11.15",
+    "node-kmeans": "^1.1.9",
     "nodemon": "^2.0.7",
     "passport": "^0.4.1",
     "passport-http": "^0.3.0",

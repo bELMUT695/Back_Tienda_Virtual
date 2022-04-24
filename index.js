@@ -12,6 +12,7 @@ const kmeans = require("./routes/kmeans");
 app.use(
   cors({ origin: "https://front-recomendacion-contenidos.herokuapp.com" })
 );
+
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
