@@ -8,10 +8,11 @@ const ClotheUserApi = require("./routes/clothe_user.js");
 const PersonalInformationApi = require("./routes/personal_information.js");
 const kmeans = require("./routes/kmeans");
 
-app.use(cors({ origin: "http://localhost:3000" }));
+/*app.use(cors({ origin: "http://localhost:3000" }));*/
 app.use(
   cors({ origin: "https://front-recomendacion-contenidos.herokuapp.com" })
 );
+
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(

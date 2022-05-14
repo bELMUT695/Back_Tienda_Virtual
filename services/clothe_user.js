@@ -11,6 +11,16 @@ class ClotheUserService {
     return clothe_users || [];
   }
 
+  async getAllKluster(cluster) {
+    const clothe_users = await this.mongoDB.getAllKluster(this.collection, cluster);
+    return clothe_users || [];
+  }
+
+  async getKlusterId(userId) {
+    const kluster = await this.mongoDB.getKlusterId(this.collection, userId);
+    return kluster || [];
+  }
+
   async getClotheUserByrating(clotheid) {
     const clothe = await this.mongoDB.getClohteRatingValue(
       this.collection,
@@ -18,6 +28,17 @@ class ClotheUserService {
     );
     return clothe || {};
   }
+
+  async getClotheUser1(clothe, user) {
+    const clothe_user = await this.mongoDB.getSearch(this.collection, clothe, user);
+    return clothe_user || {};
+  }
+
+  async updateClotheUser(id, data){
+    const updateNewId = await this.mongoDB.update(this.collection, id, data);
+    return updateNewId;
+  }
+
 }
 
 module.exports = ClotheUserService;

@@ -16,6 +16,9 @@ class ClothesService {
     return clothe || {};
   }
 
+  
+
+
   async getClohtebyId(categoryId) {
     const clothes = await this.mongoDB.getClohtebyCategory(
       this.collection,
