@@ -12,7 +12,10 @@ class ClotheUserService {
   }
 
   async getAllKluster(cluster) {
-    const clothe_users = await this.mongoDB.getAllKluster(this.collection, cluster);
+    const clothe_users = await this.mongoDB.getAllKluster(
+      this.collection,
+      cluster
+    );
     return clothe_users || [];
   }
 
@@ -30,15 +33,26 @@ class ClotheUserService {
   }
 
   async getClotheUser1(clothe, user) {
-    const clothe_user = await this.mongoDB.getSearch(this.collection, clothe, user);
+    const clothe_user = await this.mongoDB.getSearch(
+      this.collection,
+      clothe,
+      user
+    );
     return clothe_user || {};
   }
 
-  async updateClotheUser(id, data){
+  async updateClotheUser(id, data) {
     const updateNewId = await this.mongoDB.update(this.collection, id, data);
     return updateNewId;
   }
 
+  async getAttentionVisualbyId(nkluster) {
+    const clothes = await this.mongoDB.getAttentionVisual(
+      this.collection,
+      nkluster
+    );
+    return clothes || {};
+  }
 }
 
 module.exports = ClotheUserService;
