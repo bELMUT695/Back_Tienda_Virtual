@@ -11,6 +11,23 @@ class ClothesService {
     return clothes || [];
   }
 
+  async getAllClothesVisualAtentionKluster(id) {
+    console.log("GDDDDDDD", id);
+    const clothe_visual_attention =
+      await this.mongoDB.getAllClothesVisualAtentionKluster(
+        this.collection,
+        id
+      );
+    return clothe_visual_attention || [];
+  }
+
+  async getAllClotheRatingUsers() {
+    const clothe_users = await this.mongoDB.getAllClotheRatingUsers(
+      this.collection
+    );
+    return clothe_users || [];
+  }
+
   async getClothe(clotheid) {
     const clothe = await this.mongoDB.getClohtebyId(this.collection, clotheid);
     return clothe || {};

@@ -12,7 +12,7 @@ var similarityVisual = require("../lib/attention_Visual");
 var CoRatedItemsUser = require("../lib/coRatedItemsUser");
 const ClothesServices = require("../services/clothe");
 const cacheResponse = require("../utils/cacheResponse");
-
+const clothesServices = new ClothesServices();
 const {
   FIVE_MINUTES_IN_SECONDS,
   SIXTY_MINUTES_IN_SECONDS,
@@ -38,8 +38,40 @@ function ClotheUserApi(app) {
 
       // nuevo usuario o usuario sin calificaiones
       if (userCluster.length === 0) {
+        const Clothes = await clothesServices.geClothes(/*{ tags }*/);
+
+        console.log(
+          "-------------------------------------------------------------------"
+        );
+        const CloteCategory1 = Clothes.filter((e) => e.id_categoria === 1);
+
+        console.log(CloteCategory1.length);
+        var dataframe = jd.dfFromObjArray(CloteCategory1);
+        console.log("dataframe: ");
+        dataframe.p();
+        console.log(
+          "-------------------------------------------------------------------"
+        );
+
+        var dataframeSort = dataframe.sort("numSales");
+        console.log("dataframeSort: ");
+        dataframeSort.p();
+        console.log(
+          "-------------------------------------------------------------------"
+        );
+        const id_prendas_Sort = dataframeSort._cols[0].values;
+        console.log(id_prendas_Sort, "DD");
+
+        const ClotheRecomended11 = [];
+        console.log(dataframeSort._cols[9].values);
+        for (let i = 0; i < 10; i++) {
+          ClotheRecomended11[i] = await clothesServices.getClothe(
+            id_prendas_Sort[id_prendas_Sort.length - i - 1]
+          );
+        }
         return res.status(400).json({
-          message: "Usuario no tiene ninguna calificacion",
+          message: "Item recomendation Top10 more sales",
+          data: ClotheRecomended11,
         });
       }
 
@@ -93,13 +125,12 @@ function ClotheUserApi(app) {
         const createdAtt = new Date(e.TIME_STAMP.toString());
         const fechafinal = (
           (fechaActual.getTime() - createdAtt.getTime()) /
-          (1000 * 60 * 60 * 24 * 365)
+          (1000 * 60 * 60 * 24)
         ).toFixed(4);
 
         return {
           _id: e._id,
-          RATING: Math.round(e.RATING * (Math.pow(fechafinal, -0.345) * 0.393)),
-          RATING: e.RATING,
+          RATING: Math.round(e.RATING * (Math.pow(fechafinal, -0.345) * 0.49)),
           ID_USER: e.ID_USER,
           ID_CLOTHE: e.ID_CLOTHE,
           TIME_STAMP: e.TIME_STAMP,
@@ -110,15 +141,14 @@ function ClotheUserApi(app) {
         const createdAtt = new Date(e.TIME_STAMP.toString());
         const fechafinal = (
           (fechaActual.getTime() - createdAtt.getTime()) /
-          (1000 * 60 * 60 * 24 * 365)
+          (1000 * 60 * 60 * 24)
         ).toFixed(4);
-
+        console.log("fecha final", fechafinal);
         return {
           _id: e._id,
           RATING: Math.round(
-            e.RATING * (2 / (1 + Math.pow(Math.E, 0.345 * fechafinal)))
+            e.RATING * (2 / (1 + Math.pow(Math.E, 0.08066 * fechafinal)))
           ),
-          RATING: e.RATING,
           ID_USER: e.ID_USER,
           ID_CLOTHE: e.ID_CLOTHE,
           TIME_STAMP: e.TIME_STAMP,
@@ -129,13 +159,12 @@ function ClotheUserApi(app) {
         const createdAtt = new Date(e.TIME_STAMP.toString());
         const fechafinal = (
           (fechaActual.getTime() - createdAtt.getTime()) /
-          (1000 * 60 * 60 * 24 * 365)
+          (1000 * 60 * 60 * 24)
         ).toFixed(4);
-
+        console.log("fecha final", fechafinal);
         return {
           _id: e._id,
-          RATING: Math.round(e.RATING * Math.pow(Math.E, -0.345 * fechafinal)),
-          RATING: e.RATING,
+          RATING: Math.round(e.RATING * Math.pow(Math.E, -0.0258 * fechafinal)),
           ID_USER: e.ID_USER,
           ID_CLOTHE: e.ID_CLOTHE,
           VISUAL_ATTENTION: e.VISUAL_ATTENTION[0]?.vectorImage,
@@ -275,12 +304,25 @@ function ClotheUserApi(app) {
       );
 
       console.log("Similitud de los items", coMatrixDenominador);
-      const SimilitudFinalItems = math.add(
-        math.multiply(0.5, coMatrixDenominador._data),
-        math.multiply(0.5, IndexItemsRecomendationVisual)
+      const SimilitudFinal = math.add(
+        math.multiply(0.8, coMatrixDenominador._data),
+        math.multiply(0.2, IndexItemsRecomendationVisual)
       );
 
-      console.log("-----------------------------", SimilitudFinalItems);
+      console.log("----------------Matriz fff-------------", SimilitudFinal);
+      const SimilitudFinalItems = SimilitudFinal.map(function (
+        value,
+        index,
+        matrix
+      ) {
+        const power = math.pow(value, 0.05);
+
+        return power;
+      });
+      console.log(
+        "----------------Matriz General-------------",
+        SimilitudFinalItems
+      );
 
       const similitudElement1 = SimilitudFinalItems._data[0];
       console.log("ERRRRRRRRRRRR", similitudElement1);
