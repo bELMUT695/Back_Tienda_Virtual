@@ -368,7 +368,7 @@ function ClotheUserApi(app) {
         "Items_ID_Recomendation.length",
         Items_ID_Recomendation.length
       );
-      for (let i = 0; i < Items_ID_Recomendation.length; i++) {
+      for (let i = 0; i < 10; i++) {
         ClotheRecomended11[i] = await clothesServices.getClothe(
           Items_ID_Recomendation[i]
         );
