@@ -2,11 +2,13 @@ const express = require("express");
 const { typeOf } = require("mathjs");
 const ClothesServices = require("../services/clothe");
 var jd = require("jsdataframe");
+var CoRatedItemsUser = require("../lib/coRatedItemsUser");
 var similarityVisual = require("../lib/attention_Visual");
 var linearAlgebra = require("linear-algebra")(), // initialise it
   Vector = linearAlgebra.Vector,
   Matrix = linearAlgebra.Matrix;
 const math = require("mathjs");
+var getColdStartItems = require("../lib/filterColdStartElement");
 const cacheResponse = require("../utils/cacheResponse");
 const ClotheUsersServices = require("../services/clothe_user");
 const {
@@ -237,13 +239,81 @@ function ClotheApi(app) {
         arrayVisualAttention2,
         arrayVisualAttention2.length
       );
+
+      var clusterRatingMatrix = new Matrix(interaction_matrix);
+      console.log("clusterRatingMatrix: ", clusterRatingMatrix);
+      console.log(
+        "-------------------------------------------------------------------"
+      );
+
       console.log(
         "------------------Values Visual Attention2---------",
         IndexItemsRecomendationVisual2
       );
+      var normalizedMatrix = clusterRatingMatrix.map(function (v) {
+        //console.log((isNaN(v)))
+        return isNaN(v) ? 0 : v;
+      });
+
+      const RatedUser = normalizedMatrix.data[IndiceUser - 1];
+      console.log("RatedUser: ", RatedUser);
+      console.log(
+        "-------------------------------------------------------------------"
+      );
+      ratingsMatrix = math.matrix(normalizedMatrix.data);
+      console.log("ratingsMatrix: ", ratingsMatrix);
+      console.log("ratingsMatrix.size()[1]: ", ratingsMatrix.size()[1]);
+      console.log(
+        "-------------------------------------------------------------------"
+      );
+      const ratedItemsForUser = CoRatedItemsUser.CoRatedItemsUser(
+        RatedUser,
+        ratingsMatrix.size()[1]
+      );
       console.log("Identificadores", clothesformatreturn);
+      const IndexItemsRecomendation = getColdStartItems.getColdStartItems(
+        22,
+        IndexItemsRecomendationVisual2,
+        ratedItemsForUser
+      );
+      console.log("IndexItemsRecomendation: ", IndexItemsRecomendation);
+      console.log(
+        "IndexItemsRecomendation.length: ",
+        IndexItemsRecomendation.length
+      );
+      console.log(
+        "-------------------------------------------------------------------"
+      );
+
+      const Items_ID_Recomendation = [];
+      for (let index = 0; index < IndexItemsRecomendation.length; index += 1) {
+        Items_ID_Recomendation.push(
+          selected_id[IndexItemsRecomendation[index] + 1]
+        );
+      }
+      console.log("Items_ID_Recomendation: ", Items_ID_Recomendation);
+      console.log(
+        "-------------------------------------------------------------------"
+      );
+
+      /* PROBAR */
+      const ClotheRecomended11 = [];
+      console.log(
+        "Items_ID_Recomendation.length",
+        Items_ID_Recomendation.length
+      );
+      for (let i = 0; i < Items_ID_Recomendation.length; i++) {
+        ClotheRecomended11[i] = await clothesServices.getClothe(
+          Items_ID_Recomendation[i]
+        );
+      }
+      console.log("ClotheRecomended11: ", ClotheRecomended11);
+      console.log(
+        "-------------------------------------------------------------------"
+      );
+
       res.status(200).json({
-        data: ClotheUsers,
+        data: ClotheRecomended11,
         message: "Item recomendation listed",
       });
     } catch (err) {

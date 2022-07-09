@@ -309,7 +309,7 @@ function ClotheUserApi(app) {
         math.multiply(0.2, IndexItemsRecomendationVisual)
       );
 
-      console.log("----------------Matriz fff-------------", SimilitudFinal);
+      console.log("----------------Matriz ..-------------", SimilitudFinal);
       const SimilitudFinalItems = SimilitudFinal.map(function (
         value,
         index,
@@ -335,12 +335,6 @@ function ClotheUserApi(app) {
         sumValuesAttentionVisualDenominador =
           sumValuesAttentionVisualDenominador + similitudElement1[i];
       }
-
-      console.log(sumValuesAttentionVisualDenominador);
-      console.log(sumValuesAttentionVisual);
-      const Mae =
-        sumValuesAttentionVisual / sumValuesAttentionVisualDenominador;
-      console.log("rating prediction item3", Mae);
 
       const IndexItemsRecomendation =
         recommendations.CFilterJaccardRecomendation(
