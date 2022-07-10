@@ -228,8 +228,7 @@ function ClotheApi(app) {
         const user = clothesformatreturn.find(
           (visualattention) => visualattention._id === parseInt(selected_id[i])
         );
-        console.log("!!!!", user);
-        console.log("!!!!", ItemsValues[i]);
+
         if (user !== undefined) {
           arrayVisualAttention2.push(user.VISUAL_ATTENTION);
         }
@@ -272,7 +271,7 @@ function ClotheApi(app) {
       );
       console.log("Identificadores", clothesformatreturn);
       const IndexItemsRecomendation = getColdStartItems.getColdStartItems(
-        22,
+        selected_id.length - 1,
         IndexItemsRecomendationVisual2,
         ratedItemsForUser
       );
