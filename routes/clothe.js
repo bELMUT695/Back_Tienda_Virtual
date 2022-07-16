@@ -36,6 +36,77 @@ function ClotheApi(app) {
       next(error);
     }
   });
+  router.get("/topselling/categorys", async function (req, res, next) {
+    try {
+      const Clothes = await clothesServices.geClothes(/*{ tags }*/);
+
+      var dataframe = jd.dfFromObjArray(Clothes);
+
+      var dataframeSort = dataframe.sort("numSales");
+
+      const id_prendas_Sort = dataframeSort._cols[0].values;
+
+      const ClotheRecomended11 = [];
+
+      for (let i = 0; i < id_prendas_Sort.length; i++) {
+        ClotheRecomended11[i] = await clothesServices.getClothe(
+          id_prendas_Sort[id_prendas_Sort.length - i - 1]
+        );
+      }
+      return res.status(200).json({
+        message: "Item recomendation Top10 more sales",
+        data: ClotheRecomended11,
+      });
+    } catch (error) {
+      next(error);
+    }
+  });
+  router.get(
+    "/topselling/category/:categoryId",
+    async function (req, res, next) {
+      const { categoryId } = req.params;
+      try {
+        const Clothes = await clothesServices.geClothes(/*{ tags }*/);
+
+        console.log(
+          "-------------------------------------------------------------------"
+        );
+        const CloteCategory1 = Clothes.filter(
+          (e) => e.id_categoria === parseInt(categoryId)
+        );
+
+        var dataframe = jd.dfFromObjArray(CloteCategory1);
+        console.log("dataframe: ");
+        dataframe.p();
+        console.log(
+          "-------------------------------------------------------------------"
+        );
+
+        var dataframeSort = dataframe.sort("numSales");
+        console.log("dataframeSort: ");
+        dataframeSort.p();
+        console.log(
+          "-------------------------------------------------------------------"
+        );
+        const id_prendas_Sort = dataframeSort._cols[0].values;
+        console.log(id_prendas_Sort, "DD");
+
+        const ClotheRecomended11 = [];
+        console.log(dataframeSort._cols[9].values);
+        for (let i = 0; i < 10; i++) {
+          ClotheRecomended11[i] = await clothesServices.getClothe(
+            id_prendas_Sort[id_prendas_Sort.length - i - 1]
+          );
+        }
+        return res.status(200).json({
+          message: "Item recomendation Top10 more sales",
+          data: ClotheRecomended11,
+        });
+      } catch (error) {
+        next(error);
+      }
+    }
+  );
 
   router.get("/:clotheId", async function (req, res, next) {
     console.log(req.params);
@@ -88,7 +159,6 @@ function ClotheApi(app) {
 
     try {
       const userCluster = await clotheUsersServices.getKlusterId(userId);
-      console.log("userCluster: ", userCluster);
 
       // nuevo usuario o usuario sin calificaiones
       if (userCluster.length === 0) {
@@ -101,9 +171,7 @@ function ClotheApi(app) {
       for (let i = 0; i < userCluster.length; i++) {
         kuser.push(userCluster[i].k);
       }
-      console.log("kuser", kuser);
 
-      // Selecciona el cluster con mas fuerza
       const highest = (arr) =>
         (arr || []).reduce(
           (acc, el) => {
@@ -117,81 +185,33 @@ function ClotheApi(app) {
         ).max;
 
       const kelegido = highest(kuser);
-      console.log("kelegido", kelegido);
 
       //seleccion de usuarios de pertenecen  al cluster elegido
       const ClotheUsers = await clotheUsersServices.getAllKluster(kelegido);
-      console.log("ClotheUsers: ", ClotheUsers);
-      console.log(
-        "-------------------------------------------------------------------"
-      );
+
       var dataframe = jd.dfFromObjArray(ClotheUsers);
-      console.log("dataframe: ");
-      dataframe.p();
-      console.log(
-        "-------------------------------------------------------------------"
-      );
 
       var dataframeSort = dataframe.sort("ID_USER");
-      console.log("dataframeSort: ");
-      dataframeSort.p();
-      console.log(
-        "-------------------------------------------------------------------"
-      );
 
       var Newdataframe = dataframeSort.s(jd.rng(0, 3300), [
         "ID_CLOTHE",
         "RATING",
         "ID_USER",
       ]);
-      console.log("Newdataframe: ");
-      Newdataframe.p();
-      console.log(
-        "-------------------------------------------------------------------"
-      );
 
       var pivotedMatrix = Newdataframe.pivot("ID_CLOTHE", "RATING");
-      console.log("pivotedMatrix: ");
-      pivotedMatrix.p();
-      console.log(
-        "-------------------------------------------------------------------"
-      );
 
       var pivotedMatrixItems = Newdataframe.pivot("ID_USER", "RATING");
-      console.log("pivotedMatrixItems: ");
-      pivotedMatrixItems.p();
-      console.log(
-        "-------------------------------------------------------------------"
-      );
-
-      //console.log(pivotedMatrix.nCol(), "fssdsds");
-      // console.log(pivotedMatrix.p()[1])
 
       var interaction_matrix = pivotedMatrix
         .s(null, jd.rng(1, pivotedMatrix.nCol()))
         .toMatrix();
-      console.log("interaction_matrix: ", interaction_matrix);
-      console.log(
-        "-------------------------------------------------------------------"
-      );
 
       var clusterRatingMatrix = new Matrix(interaction_matrix);
-      console.log("clusterRatingMatrix: ", clusterRatingMatrix);
-      console.log(
-        "-------------------------------------------------------------------"
-      );
 
       var IndiceUser = pivotedMatrixItems._names.values.indexOf(userId);
-      console.log("IndiceUser: ", IndiceUser);
-      console.log(
-        "-------------------------------------------------------------------"
-      );
 
       var ItemsValues = pivotedMatrix._names.values;
-      console.log("ItemsValues: ", ItemsValues);
-      console.log(
-        "-------------------------------------------------------------------"
-      );
 
       const ClotheUserrating = await clothesServices.getAllClotheRatingUsers();
 
@@ -205,10 +225,8 @@ function ClotheApi(app) {
       }
       const selected_id = ItemsValues.concat(clothesanycalification);
 
-      console.log("Arranque en frio de elementos", selected_id);
       const clothesanycalification2 = [];
       for (let i = 1; i < selected_id.length; i++) {
-        console.log(typeof selected_id[i]);
         const ClotheUsersra =
           await clothesServices.getAllClothesVisualAtentionKluster(
             selected_id[i]
@@ -240,48 +258,25 @@ function ClotheApi(app) {
       );
 
       var clusterRatingMatrix = new Matrix(interaction_matrix);
-      console.log("clusterRatingMatrix: ", clusterRatingMatrix);
-      console.log(
-        "-------------------------------------------------------------------"
-      );
 
-      console.log(
-        "------------------Values Visual Attention2---------",
-        IndexItemsRecomendationVisual2
-      );
       var normalizedMatrix = clusterRatingMatrix.map(function (v) {
         //console.log((isNaN(v)))
         return isNaN(v) ? 0 : v;
       });
 
       const RatedUser = normalizedMatrix.data[IndiceUser - 1];
-      console.log("RatedUser: ", RatedUser);
-      console.log(
-        "-------------------------------------------------------------------"
-      );
+
       ratingsMatrix = math.matrix(normalizedMatrix.data);
-      console.log("ratingsMatrix: ", ratingsMatrix);
-      console.log("ratingsMatrix.size()[1]: ", ratingsMatrix.size()[1]);
-      console.log(
-        "-------------------------------------------------------------------"
-      );
+
       const ratedItemsForUser = CoRatedItemsUser.CoRatedItemsUser(
         RatedUser,
         ratingsMatrix.size()[1]
       );
-      console.log("Identificadores", clothesformatreturn);
+
       const IndexItemsRecomendation = getColdStartItems.getColdStartItems(
         selected_id.length - 1,
         IndexItemsRecomendationVisual2,
         ratedItemsForUser
-      );
-      console.log("IndexItemsRecomendation: ", IndexItemsRecomendation);
-      console.log(
-        "IndexItemsRecomendation.length: ",
-        IndexItemsRecomendation.length
-      );
-      console.log(
-        "-------------------------------------------------------------------"
       );
 
       const Items_ID_Recomendation = [];
@@ -290,26 +285,25 @@ function ClotheApi(app) {
           selected_id[IndexItemsRecomendation[index] + 1]
         );
       }
-      console.log("Items_ID_Recomendation: ", Items_ID_Recomendation);
-      console.log(
-        "-------------------------------------------------------------------"
-      );
 
       /* PROBAR */
-      const ClotheRecomended11 = [];
-      console.log(
-        "Items_ID_Recomendation.length",
-        Items_ID_Recomendation.length
-      );
+
+      const ClotheRecomended13 = [];
       for (let i = 0; i < Items_ID_Recomendation.length; i++) {
+        const elementfind = clothesanycalification.find(
+          (item) => item === Items_ID_Recomendation[i]
+        );
+        if (elementfind) {
+          ClotheRecomended13.push(elementfind);
+        }
+      }
+      console.log(ClotheRecomended13);
+      const ClotheRecomended11 = [];
+      for (let i = 0; i < ClotheRecomended13.length; i++) {
         ClotheRecomended11[i] = await clothesServices.getClothe(
-          Items_ID_Recomendation[i]
+          ClotheRecomended13[i]
         );
       }
-      console.log("ClotheRecomended11: ", ClotheRecomended11);
-      console.log(
-        "-------------------------------------------------------------------"
-      );
 
       res.status(200).json({
         data: ClotheRecomended11,

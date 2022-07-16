@@ -12,7 +12,6 @@ class ClothesService {
   }
 
   async getAllClothesVisualAtentionKluster(id) {
-    console.log("GDDDDDDD", id);
     const clothe_visual_attention =
       await this.mongoDB.getAllClothesVisualAtentionKluster(
         this.collection,
