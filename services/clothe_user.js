@@ -41,6 +41,13 @@ class ClotheUserService {
     return clothe || {};
   }
 
+  async getAllKluster1(cluster) {
+    const clothe_users = await this.mongoDB.getAllKluster1(
+      this.collection,
+      cluster
+    );
+    return clothe_users || [];
+  }
   async updateValueRating(id, objectValueRating) {
     console.log(objectValueRating, id, "service");
     const clothe = await this.mongoDB.ratingValueUpdateOne(

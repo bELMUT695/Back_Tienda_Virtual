@@ -98,6 +98,24 @@ function ClotheUserApi(app) {
       next(error);
     }
   });
+  router.get("/consultaKluster/:kelegido", async function (req, res, next) {
+    const { kelegido } = req.params;
+    console.log("kelegido: ", kelegido);
+
+    try {
+      const ClotheUsers = await clotheUsersServices.getAllKluster1(
+        parseInt(kelegido)
+      );
+      console.log("userCluster: ", ClotheUsers);
+
+      return res.status(200).json({
+        ClotheUsers: ClotheUsers,
+        message: true,
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
   router.get("/value-rating/:Id", async function (req, res, next) {
     const { Id } = req.params;
 
