@@ -1,6 +1,7 @@
 const express = require("express");
 
 var jd = require("jsdataframe");
+var isodate = require("isodate");
 const math = require("mathjs");
 var linearAlgebra = require("linear-algebra")(), // initialise it
   Vector = linearAlgebra.Vector,
@@ -25,6 +26,88 @@ function ClotheUserApi(app) {
   const clotheUsersServices = new ClotheUsersServices();
   const clothesServices = new ClothesServices();
 
+  router.get("/consultrating/:userId", async function (req, res, next) {
+    const { userId } = req.params;
+
+    const { tags } = req.query;
+
+    try {
+      const userCluster = await clotheUsersServices.getKlusterId(userId);
+      console.log("userCluster: ", userCluster);
+
+      // nuevo usuario o usuario sin calificaiones
+      if (userCluster.length === 0) {
+        return res.status(200).json({
+          message: false,
+        });
+      } else {
+        console.log("true");
+        return res.status(200).json({
+          message: true,
+        });
+      }
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.post("/insert-rating/:Id", async function (req, res, next) {
+    const { Id } = req.params;
+    const cuerpo = req.body;
+    console.log(typeof cuerpo.ID_USER);
+    console.log(typeof cuerpo.ID_CLOTHE, "prenda");
+    const variable = 0.67;
+    try {
+      const clothes = await clotheUsersServices.getUserUserByrating(
+        Id,
+        cuerpo.ID_CLOTHE
+      );
+      console.log(clothes.length);
+      console.log(clothes, "Hola");
+      if (clothes.length === 0) {
+        const time_stamp = {
+          TIME_STAMP: isodate("2022-06-20T00:00:00.000+00:00"),
+        };
+
+        const objecttoinsert = {
+          ...time_stamp,
+          ...cuerpo,
+        };
+        console.log(typeof variable, "FFFFFFFFFFF");
+        console.log(typeof objecttoinsert.ID_USER);
+        console.log(typeof objecttoinsert.ID_CLOTHE, "prenda");
+        const clothes = await clotheUsersServices.postValueRating(
+          objecttoinsert
+        );
+        return res.status(200).json({
+          data: objecttoinsert,
+          message: "Rating insertado",
+        });
+      }
+
+      return res.status(200).json({
+        data: clothes,
+        message: "Evaluaciones encontradas",
+      });
+    } catch (error) {
+      next(error);
+    }
+  });
+  router.get("/value-rating/:Id", async function (req, res, next) {
+    const { Id } = req.params;
+
+    try {
+      const clothes = await clotheUsersServices.getClotheUserByrating(Id);
+
+      res.status(200).json({
+        data: clothes,
+        message: "rating encontradass",
+      });
+    } catch (error) {
+      next(error);
+    }
+  });
+
   router.get("/:userId", async function (req, res, next) {
     const { userId } = req.params;
 
@@ -38,40 +121,8 @@ function ClotheUserApi(app) {
 
       // nuevo usuario o usuario sin calificaiones
       if (userCluster.length === 0) {
-        const Clothes = await clothesServices.geClothes(/*{ tags }*/);
-
-        console.log(
-          "-------------------------------------------------------------------"
-        );
-        const CloteCategory1 = Clothes.filter((e) => e.id_categoria === 1);
-
-        console.log(CloteCategory1.length);
-        var dataframe = jd.dfFromObjArray(CloteCategory1);
-        console.log("dataframe: ");
-        dataframe.p();
-        console.log(
-          "-------------------------------------------------------------------"
-        );
-
-        var dataframeSort = dataframe.sort("numSales");
-        console.log("dataframeSort: ");
-        dataframeSort.p();
-        console.log(
-          "-------------------------------------------------------------------"
-        );
-        const id_prendas_Sort = dataframeSort._cols[0].values;
-        console.log(id_prendas_Sort, "DD");
-
-        const ClotheRecomended11 = [];
-        console.log(dataframeSort._cols[9].values);
-        for (let i = 0; i < 10; i++) {
-          ClotheRecomended11[i] = await clothesServices.getClothe(
-            id_prendas_Sort[id_prendas_Sort.length - i - 1]
-          );
-        }
         return res.status(400).json({
-          message: "Item recomendation Top10 more sales",
-          data: ClotheRecomended11,
+          message: "Usuario nuevo",
         });
       }
 
@@ -384,21 +435,6 @@ function ClotheUserApi(app) {
       });
     } catch (err) {
       next(err);
-    }
-  });
-
-  router.get("/value-rating/:Id", async function (req, res, next) {
-    const { Id } = req.params;
-
-    try {
-      const clothes = await clotheUsersServices.getClotheUserByrating(Id);
-
-      res.status(200).json({
-        data: clothes,
-        message: "categorias encontradass",
-      });
-    } catch (error) {
-      next(error);
     }
   });
 }

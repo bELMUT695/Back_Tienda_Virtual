@@ -32,6 +32,15 @@ class ClotheUserService {
     return clothe || {};
   }
 
+  async getUserUserByrating(userid, clotheid) {
+    const clothe = await this.mongoDB.getUserRatingValue(
+      this.collection,
+      userid,
+      clotheid
+    );
+    return clothe || {};
+  }
+
   async getClotheUser1(clothe, user) {
     const clothe_user = await this.mongoDB.getSearch(
       this.collection,
@@ -52,6 +61,9 @@ class ClotheUserService {
       nkluster
     );
     return clothes || {};
+  }
+  async postValueRating(data) {
+    const clothes = await this.mongoDB.insertValueRating(this.collection, data);
   }
 }
 
