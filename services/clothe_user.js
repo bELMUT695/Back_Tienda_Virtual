@@ -41,6 +41,16 @@ class ClotheUserService {
     return clothe || {};
   }
 
+  async updateValueRating(id, objectValueRating) {
+    console.log(objectValueRating, id, "service");
+    const clothe = await this.mongoDB.ratingValueUpdateOne(
+      this.collection,
+      id,
+      objectValueRating
+    );
+    return clothe || {};
+  }
+
   async getClotheUser1(clothe, user) {
     const clothe_user = await this.mongoDB.getSearch(
       this.collection,

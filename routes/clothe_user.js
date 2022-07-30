@@ -57,13 +57,15 @@ function ClotheUserApi(app) {
     console.log(typeof cuerpo.ID_USER);
     console.log(typeof cuerpo.ID_CLOTHE, "prenda");
     const variable = 0.67;
+
     try {
       const clothes = await clotheUsersServices.getUserUserByrating(
         Id,
         cuerpo.ID_CLOTHE
       );
-      console.log(clothes.length);
-      console.log(clothes, "Hola");
+
+      const columnratingvalue = { RATING: cuerpo.RATING };
+      let IdRegisterObject = clothes[0]._id;
       if (clothes.length === 0) {
         const time_stamp = {
           TIME_STAMP: isodate("2022-06-20T00:00:00.000+00:00"),
@@ -73,9 +75,7 @@ function ClotheUserApi(app) {
           ...time_stamp,
           ...cuerpo,
         };
-        console.log(typeof variable, "FFFFFFFFFFF");
-        console.log(typeof objecttoinsert.ID_USER);
-        console.log(typeof objecttoinsert.ID_CLOTHE, "prenda");
+
         const clothes = await clotheUsersServices.postValueRating(
           objecttoinsert
         );
@@ -84,9 +84,14 @@ function ClotheUserApi(app) {
           message: "Rating insertado",
         });
       } else {
+        const clothes = await clotheUsersServices.updateValueRating(
+          IdRegisterObject,
+          columnratingvalue
+        );
+
         return res.status(200).json({
           data: clothes,
-          message: "Evaluaciones encontradas",
+          message: "Rating modificado",
         });
       }
     } catch (error) {
