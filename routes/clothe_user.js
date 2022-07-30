@@ -83,12 +83,12 @@ function ClotheUserApi(app) {
           data: objecttoinsert,
           message: "Rating insertado",
         });
+      } else {
+        return res.status(200).json({
+          data: clothes,
+          message: "Evaluaciones encontradas",
+        });
       }
-
-      return res.status(200).json({
-        data: clothes,
-        message: "Evaluaciones encontradas",
-      });
     } catch (error) {
       next(error);
     }
