@@ -97,25 +97,41 @@ function authApi(app) {
     })(req, res, next);
   });
 
+  const User = require('../utils/schema/users');
+  const bcrypt = require('bcrypt');
+
   router.post(
     "/sign-up",
-    validationHandler(createUserSchema),
-    async (req, res, next) => {
-      // sacamos del body el user:
-      console.log(req.body);
-      const { body: user } = req;
+    async (req, res) => {
+      const { first_name, last_name, gender, email, password } = req.body;
 
-      try {
-        //llamamos nuestro servicio de creación de usuario
-        const createUserId = await usersServices.createUser({ user });
+
+        /*const userExists = await User.findOne({ email });
+        if (userExists) {
+          res.status(400);
+          throw new Error("User already exists");
+        }*/
+
+        // Create user
+        const user = new User({
+          first_name, 
+          last_name, 
+          gender,
+          email,
+          password,
+        });
+
+        // Encrypt the password
+        const salt = bcrypt.genSaltSync(10);
+        user.password = bcrypt.hashSync(req.body.password, salt);
+
+        // Save in BD
+        await user.save();
 
         res.status(201).json({
-          data: createUserId,
-          message: "user created",
+          message: 'Successfully registered',
+          user: user
         });
-      } catch (err) {
-        next(err);
-      }
     }
   );
 }

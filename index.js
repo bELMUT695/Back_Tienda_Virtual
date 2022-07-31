@@ -7,6 +7,7 @@ const ClotheApi = require("./routes/clothe.js");
 const ClotheUserApi = require("./routes/clothe_user.js");
 const PersonalInformationApi = require("./routes/personal_information.js");
 const kmeans = require("./routes/kmeans");
+const  { dbConnection } = require("./utils/mongodb");
 
 app.use(cors({ origin: "http://localhost:3000" }));
 /*app.use(
@@ -23,6 +24,8 @@ app.use((req, res, next) => {
   res.header("Allow", "GET, POST, OPTIONS, PUT, DELETE");
   next();
 });
+
+dbConnection();
 
 app.use(express.json());
 ClotheApi(app);
