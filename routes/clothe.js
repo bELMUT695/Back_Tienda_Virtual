@@ -235,6 +235,7 @@ function ClotheApi(app) {
         clothesanycalification.push(clotheswithoutrating[i]._id.toString());
       }
       const selected_id = ItemsValues.concat(clothesanycalification);
+      console.log('::selected_id', selected_id);
 
       const clothesanycalification2 = [];
       for (let i = 1; i < selected_id.length; i++) {
@@ -244,8 +245,9 @@ function ClotheApi(app) {
           );
         clothesanycalification2.push(ClotheUsersra[0]);
       }
-
+      console.log('::', clothesanycalification2);
       const clothesformatreturn = clothesanycalification2.map((e) => {
+        
         return {
           _id: e._id,
           VISUAL_ATTENTION: e.VISUAL_ATTENTION[0]?.vectorImage,
