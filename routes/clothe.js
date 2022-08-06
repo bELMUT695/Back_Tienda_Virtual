@@ -92,23 +92,26 @@ function ClotheApi(app) {
         console.log(id_prendas_Sort, "DD");
 
         const ClotheRecomended11 = [];
-        console.log('console.log(dataframeSort._cols[9]',dataframeSort._cols[9]);
+        console.log(
+          "console.log(dataframeSort._cols[9]",
+          dataframeSort._cols[9]
+        );
         console.log(dataframeSort._cols[9].values);
-        if(id_prendas_Sort.length>10) {
+        if (id_prendas_Sort.length > 10) {
           for (let i = 0; i < 10; i++) {
             ClotheRecomended11[i] = await clothesServices.getClothe(
               id_prendas_Sort[id_prendas_Sort.length - i - 1]
             );
           }
         }
-        if(id_prendas_Sort.length<=10) {
+        if (id_prendas_Sort.length <= 10) {
           for (let i = 0; i < id_prendas_Sort.length; i++) {
             ClotheRecomended11[i] = await clothesServices.getClothe(
               id_prendas_Sort[id_prendas_Sort.length - i - 1]
             );
           }
         }
-        
+
         return res.status(200).json({
           message: "Item recomendation Top10 more sales",
           data: ClotheRecomended11,
@@ -245,9 +248,10 @@ function ClotheApi(app) {
           );
         clothesanycalification2.push(ClotheUsersra[0]);
       }
+
       console.log('::', clothesanycalification2);
       const clothesformatreturn = clothesanycalification2.map((e) => {
-        
+              
         return {
           _id: e._id,
           VISUAL_ATTENTION: e.VISUAL_ATTENTION[0]?.vectorImage,

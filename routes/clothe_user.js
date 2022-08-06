@@ -63,9 +63,9 @@ function ClotheUserApi(app) {
         Id,
         cuerpo.ID_CLOTHE
       );
-
+      console.log(clothes, "ff");
       const columnratingvalue = { RATING: cuerpo.RATING };
-      let IdRegisterObject = clothes[0]._id;
+
       if (clothes.length === 0) {
         const time_stamp = {
           TIME_STAMP: isodate("2022-06-20T00:00:00.000+00:00"),
@@ -84,6 +84,7 @@ function ClotheUserApi(app) {
           message: "Rating insertado",
         });
       } else {
+        let IdRegisterObject = clothes[0]._id;
         const clothes = await clotheUsersServices.updateValueRating(
           IdRegisterObject,
           columnratingvalue
