@@ -65,10 +65,10 @@ function ClotheUserApi(app) {
       );
       console.log(clothes, "ff");
       const columnratingvalue = { RATING: cuerpo.RATING };
-
+      const fecha = new Date();
       if (clothes.length === 0) {
         const time_stamp = {
-          TIME_STAMP: isodate("2022-06-20T00:00:00.000+00:00"),
+          TIME_STAMP: isodate(fecha.toISOString()),
         };
 
         const objecttoinsert = {
