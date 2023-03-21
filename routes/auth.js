@@ -6,7 +6,6 @@ const ApiKeysService = require("../services/apiKeys");
 const UsersService = require("../services/user");
 const validationHandler = require("../utils/middleware/validationHandler");
 const { createUserSchema } = require("../utils/schema/user");
-const joi = require("@hapi/joi");
 require("../utils/auth/strategies/basic");
 function authApi(app) {
   const router = express.Router();

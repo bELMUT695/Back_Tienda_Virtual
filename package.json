@@ -20,7 +20,6 @@
   "homepage": "https://github.com/bELMUT695/Back_Tienda_Virtual#readme",
   "dependencies": {
     "@hapi/boom": "^9.1.2",
-    "@hapi/joi": "^15.1.0",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
