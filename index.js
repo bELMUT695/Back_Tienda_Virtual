@@ -9,9 +9,9 @@ const PersonalInformationApi = require("./routes/personal_information.js");
 const kmeans = require("./routes/kmeans");
 const { dbConnection } = require("./utils/mongodb");
 
-/*app.use(cors({ origin: "http://localhost:3000" }));*/
+//app.use(cors({ origin: "http://localhost:3000" }));
 app.use(
-  cors({ origin: "https://front-recomendacion-contenidos.herokuapp.com" })
+  cors({ origin: "https://prod-recomended-system.netlify.app" })
 );
 
 app.use((req, res, next) => {

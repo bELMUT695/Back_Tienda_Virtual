@@ -17,6 +17,8 @@ passport.use(
         return cb(boom.unauthorized(), false);
       }
 
+      console.log(user.password + "fffffffffffffffff")
+      console.log(password + "444444444444444444444444444444444")
       if (!(await bcrypt.compare(password, user.password))) {
         return cb(boom.unauthorized(), false);
       }
